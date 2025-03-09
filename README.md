@@ -7,7 +7,7 @@ The `env` package provides utility functions to simplify retrieving environment 
 To use the `env` package, you need to include it in your project. Assuming it is part of your Go application's module, you can import it directly:
 
 ```go
-import "your_module_name/env"
+import "github.com/elum-utils/env"
 ```
 
 ## Functions
