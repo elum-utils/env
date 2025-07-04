@@ -111,3 +111,23 @@ func GetEnvArrayDuration(key string, split string, defaultValue []time.Duration)
     }
     return defaultValue
 }
+
+// GetEnvMapStringString retrieves an environment variable's value as a map[string]string.
+// It splits entries using entryDelimiter and key-value using kvDelimiter.
+// Returns defaultValue if the env variable is not set.
+// Panics if any entry doesn't contain exactly one key-value delimiter.
+func GetEnvMapStringString(key string, entryDelimiter string, kvDelimiter string, defaultValue map[string]string) map[string]string {
+    if value, exists := os.LookupEnv(key); exists {
+        result := make(map[string]string)
+        entries := strings.Split(value, entryDelimiter)
+        for _, entry := range entries {
+            kv := strings.SplitN(entry, kvDelimiter, 2)
+            if len(kv) != 2 {
+                panic(fmt.Sprintf("Environment variable %s contains invalid map entry: %s", key, entry))
+            }
+            result[strings.TrimSpace(kv[0])] = strings.TrimSpace(kv[1])
+        }
+        return result
+    }
+    return defaultValue
+}

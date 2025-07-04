@@ -76,6 +76,24 @@ func GetEnvArrayDuration(key string, split string, defaultValue []time.Duration)
 
 Retrieves an environment variable's value as a slice of `time.Duration` by splitting it using the provided delimiter. Returns the `defaultValue` if the variable is not set. Panics if any value in the slice cannot be converted to a duration.
 
+### GetEnvMapStringString
+
+```go
+func GetEnvMapStringString(key string, entryDelimiter string, kvDelimiter string, defaultValue map[string]string) map[string]string
+```
+
+Retrieves an environment variable's value as a map[string]string.
+The format of the string must follow the pattern:
+
+key1:value1,key2:value2
+entryDelimiter (e.g. ,) is used to separate pairs.
+kvDelimiter (e.g. :) is used to separate key and value.
+Panics if any pair does not contain exactly one key-value delimiter.
+
+Returns defaultValue if the environment variable is not set.
+
+
+
 ## Example Usage
 
 Here is how you might use the `env` package in a Go application:
@@ -85,26 +103,25 @@ package main
 
 import (
     "fmt"
-    "your_module_name/env"
     "time"
 )
 
 var (
-    myString = env.GetEnvString("MY_STRING", "defaultString")
-    myInt = env.GetEnvInt("MY_INT", 42)
+    myString   = env.GetEnvString("MY_STRING", "defaultString")
+    myInt      = env.GetEnvInt("MY_INT", 42)
     myDuration = env.GetEnvDuration("MY_DURATION", 30*time.Second)
-    myBool = env.GetEnvBool("MY_BOOL", false)
-    myFloat = env.GetEnvFloat64("MY_FLOAT", 3.14)
+    myBool     = env.GetEnvBool("MY_BOOL", false)
+    myFloat    = env.GetEnvFloat64("MY_FLOAT", 3.14)
+    myMap      = env.GetEnvMapStringString("MY_MAP", ",", ":", map[string]string{"default": "value"})
 )
 
 func main() {
-
-
     fmt.Println("String:", myString)
     fmt.Println("Int:", myInt)
     fmt.Println("Duration:", myDuration)
     fmt.Println("Bool:", myBool)
     fmt.Println("Float:", myFloat)
+    fmt.Println("Map:", myMap)
 }
 ```
 

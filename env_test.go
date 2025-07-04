@@ -135,3 +135,30 @@ func TestGetEnvArrayDuration(t *testing.T) {
         }
     }
 }
+
+// Test for retrieving a map[string]string from an environment variable
+func TestGetEnvMapStringString(t *testing.T) {
+    os.Setenv("TEST_MAP", "key1:val1,key2:val2,key3:val3")
+    defer os.Unsetenv("TEST_MAP")
+
+    got := GetEnvMapStringString("TEST_MAP", ",", ":", nil)
+    want := map[string]string{
+        "key1": "val1",
+        "key2": "val2",
+        "key3": "val3",
+    }
+
+    for k, v := range want {
+        if got[k] != v {
+            t.Errorf("for key %q, got %q; want %q", k, got[k], v)
+        }
+    }
+
+    // Test default return
+    os.Unsetenv("TEST_MAP")
+    def := map[string]string{"default": "value"}
+    gotDef := GetEnvMapStringString("TEST_MAP", ",", ":", def)
+    if gotDef["default"] != "value" {
+        t.Errorf("expected default value to be returned, got %v", gotDef)
+    }
+}
